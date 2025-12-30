@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Socio - C.S. y D. Constitución</title>
+    <link rel="stylesheet" href="perfil.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Ajuste rápido para que la foto se vea bien si es circular */
+        #perfil-foto {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--amarillo);
+            background: #222;
+        }
+        #foto-container { text-align: center; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="logo2.png" alt="Logo" class="logo-header">
+    <h1>Panel del Socio</h1>
+    <a href="../index.html" class="btn-volver">Volver al Inicio</a>
+</header>
+
+<div class="container">
+    <section class="perfil-card">
+        <div id="foto-container">
+            <img id="perfil-foto" src="placeholder-user.png" alt="Foto de Perfil">
+        </div>
+        <div class="perfil-info">
+            <h2 id="perfil-nombre">Cargando datos...</h2>
+            <div style="background: rgba(255,215,0,0.1); padding: 10px; border-radius: 8px; margin-top: 10px;">
+                <p><strong>DNI:</strong> <span id="perfil-dni">--</span></p>
+                <p><strong>N° SOCIO:</strong> <span id="perfil-nro">--</span></p>
+                <p><strong>Categoría:</strong> <span id="perfil-cat">--</span></p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cuotas-section">
+        <h2><i class="fas fa-file-invoice-dollar"></i> Estado de Cuotas 2025</h2>
+        <div class="meses-grid" id="contenedor-meses">
+            </div>
+    </section>
+
+    <section class="invita-section">
+        <h3><i class="fas fa-users"></i> Invita a un amigo</h3>
+        <p>Ayudanos a que el Canario siga creciendo.</p>
+        <button onclick="enviarInvitacionWhatsApp()" class="btn-whatsapp">
+            <i class="fab fa-whatsapp"></i> Enviar invitación por WhatsApp
+        </button>
+    </section>
+</div>
+
+<script src="perfil.js"></script>
+
+<script>
+    // Pequeña validación de seguridad al entrar
+    document.addEventListener('DOMContentLoaded', () => {
+        const dniExistente = localStorage.getItem('socioDni');
+        if (!dniExistente) {
+            alert("Por favor, registrate para acceder a tu panel.");
+            window.location.href = "index.html"; // Lo manda al registro si no hay datos
+        }
+    });
+</script>
+
+</body>
+</html>

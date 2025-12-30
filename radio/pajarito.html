@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radio El Canario - Oficial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --amarillo: #FFD700;
+            --negro-fondo: #0a0a0a;
+            --negro-card: #141414;
+            --blanco: #ffffff;
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: var(--negro-fondo);
+            font-family: 'Segoe UI', sans-serif;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .contenedor-radio {
+            background-color: var(--negro-card);
+            border: 3px solid var(--amarillo);
+            border-radius: 30px;
+            width: 95%; max-width: 450px;
+            padding: 30px 20px; text-align: center;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+        }
+
+        .logo-centrado {
+            width: 140px; height: auto; margin-bottom: 15px;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
+        }
+
+        h1 { color: var(--amarillo); margin: 5px 0; font-size: 22px; text-transform: uppercase; }
+        h2 { color: var(--amarillo); font-size: 14px; margin-top: 20px; text-transform: uppercase; opacity: 0.9; }
+        p { color: var(--blanco); font-size: 13px; opacity: 0.8; margin-bottom: 20px; }
+
+        .player-box { background: #000; padding: 12px; border-radius: 15px; margin-bottom: 15px; border: 1px solid #333; }
+        
+        audio { width: 100%; filter: invert(100%) hue-rotate(180deg) brightness(1.5); }
+
+        .upload-section {
+            background: #222;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 1px dashed var(--amarillo);
+        }
+
+        #file-input { display: none; }
+
+        .custom-file-upload {
+            display: inline-block;
+            background-color: transparent;
+            color: var(--amarillo);
+            border: 2px solid var(--amarillo);
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .custom-file-upload:hover {
+            background-color: var(--amarillo);
+            color: #000;
+        }
+
+        /* --- NUEVOS ESTILOS: LISTA Y BOTONES --- */
+        .playlist-container {
+            max-height: 100px;
+            overflow-y: auto;
+            margin: 15px 0;
+            text-align: left;
+            background: #111;
+            border-radius: 10px;
+            padding: 5px;
+        }
+
+        .playlist-item {
+            color: var(--blanco);
+            font-size: 11px;
+            padding: 5px;
+            border-bottom: 1px solid #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .playlist-item.active {
+            color: var(--amarillo);
+            font-weight: bold;
+        }
+
+        .controls-extra {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 10px 0;
+        }
+
+        .btn-control {
+            background: #333;
+            color: var(--amarillo);
+            border: 1px solid var(--amarillo);
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .btn-control:hover { background: var(--amarillo); color: #000; }
+
+        /* --------------------------------------- */
+
+        .btn-inicio {
+            display: inline-block; background-color: var(--amarillo);
+            color: #000; text-decoration: none; padding: 12px 25px;
+            border-radius: 10px; font-weight: bold; text-transform: uppercase; font-size: 13px;
+        }
+
+        .vivo-tag { color: #ff4444; font-weight: bold; font-size: 11px; margin-bottom: 10px; display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="contenedor-radio">
+        <span class="vivo-tag"><i class="fas fa-circle"></i> EN VIVO</span>
+        
+        <img src="../logo2.png" alt="Logo El Canario" class="logo-centrado">
+
+        <h1>RADIO EL CANARIO</h1>
+        <p>Señal Oficial del Club</p>
+
+        <div class="player-box">
+            <audio controls>
+                <source src="http://tu-servidor-de-radio.com:8000/stream" type="audio/mpeg">
+            </audio>
+        </div>
+
+        <div class="upload-section">
+            <h2>Música o Publicidad</h2>
+            
+            <label for="file-input" class="custom-file-upload">
+                <i class="fas fa-plus"></i> Agregar a la Lista
+            </label>
+            <input type="file" id="file-input" accept="audio/*" multiple>
+
+            <div class="playlist-container" id="playlist-visual">
+                <div class="playlist-item" style="color: #666;">Lista vacía...</div>
+            </div>
+
+            <div class="controls-extra">
+                <button class="btn-control" onclick="playCurrent()"><i class="fas fa-play"></i> PLAY</button>
+                <button class="btn-control" onclick="stopCurrent()"><i class="fas fa-stop"></i> STOP</button>
+            </div>
+
+            <div class="player-box" style="margin-bottom: 0; margin-top: 5px;">
+                <audio id="local-player" controls></audio>
+            </div>
+        </div>
+
+        <a href="../index.html" class="btn-inicio">
+            <i class="fas fa-home"></i> REGRESAR AL INICIO
+        </a>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const localPlayer = document.getElementById('local-player');
+        const playlistVisual = document.getElementById('playlist-visual');
+        
+        let playlist = [];
+        let currentIndex = 0;
+
+        fileInput.addEventListener('change', function() {
+            const newFiles = Array.from(this.files);
+            
+            newFiles.forEach(file => {
+                playlist.push({
+                    name: file.name,
+                    url: URL.createObjectURL(file)
+                });
+            });
+
+            updatePlaylistUI();
+
+            if (localPlayer.paused && playlist.length > 0) {
+                loadTrack(currentIndex);
+            }
+        });
+
+        function updatePlaylistUI() {
+            playlistVisual.innerHTML = "";
+            playlist.forEach((track, index) => {
+                const item = document.createElement('div');
+                item.className = `playlist-item ${index === currentIndex ? 'active' : ''}`;
+                item.textContent = `${index + 1}. ${track.name}`;
+                playlistVisual.appendChild(item);
+            });
+        }
+
+        function loadTrack(index) {
+            if (playlist.length > 0) {
+                currentIndex = index;
+                localPlayer.src = playlist[currentIndex].url;
+                updatePlaylistUI();
+            }
+        }
+
+        function playCurrent() {
+            if (playlist.length > 0) {
+                localPlayer.play();
+            }
+        }
+
+        function stopCurrent() {
+            localPlayer.pause();
+            localPlayer.currentTime = 0;
+        }
+
+        // Lógica de reproducción automática y bucle
+        localPlayer.addEventListener('ended', function() {
+            currentIndex++;
+            if (currentIndex >= playlist.length) {
+                currentIndex = 0; // Vuelve al inicio si terminó la lista
+            }
+            loadTrack(currentIndex);
+            localPlayer.play();
+        });
+    </script>
+</body>
+</html>

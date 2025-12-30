@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Socio - Club Constitución</title>
+    <style>
+    /* Diseño con colores oficiales: Negro, Amarillo y Blanco */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #000000; /* Negro Fondo */
+        color: #FFFFFF; /* Blanco Texto */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .login-box {
+        background-color: #1a1a1a; /* Negro suave para la caja */
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        border-bottom: 4px solid #FFD700; /* Amarillo Canario */
+    }
+
+    img { 
+        width: 100px; 
+        margin-bottom: 20px; 
+        filter: drop-shadow(0px 0px 5px rgba(255, 215, 0, 0.3)); 
+    }
+
+    h2 { 
+        margin-bottom: 20px; 
+        font-weight: bold; 
+        color: #FFD700; /* Título en Amarillo */
+        text-transform: uppercase;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 6px;
+        border: 1px solid #FFD700; /* Borde Amarillo */
+        background-color: #2a2a2a;
+        color: white;
+        box-sizing: border-box;
+        outline: none;
+    }
+
+    input:focus { 
+        border-color: #FFFFFF; /* Resalte en blanco al escribir */
+        box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background-color: #FFD700; /* Fondo Amarillo */
+        color: #000000; /* Texto Negro para legibilidad */
+        border: none;
+        border-radius: 6px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 10px;
+        text-transform: uppercase;
+    }
+
+    button:hover { 
+        background-color: #e6c300; /* Amarillo un poco más oscuro al pasar el mouse */
+        transform: translateY(-2px);
+    }
+
+    .error { 
+        color: #ff4444; 
+        margin-bottom: 15px; 
+        font-size: 14px; 
+    }
+
+    .btn-volver {
+        display: inline-block;
+        margin-top: 20px;
+        color: #FFD700; /* Amarillo */
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .btn-volver:hover { 
+        color: #FFFFFF; /* Cambia a blanco al pasar el mouse */
+        text-decoration: underline;
+    }
+</style>
+</head>
+<body>
+
+<div class="login-box">
+    <img src="logo2.png" alt="Club Constitución">
+    <h2>Panel del Socio</h2>
+    
+    <p id="error-msg" class="error">Socio no encontrado o datos incorrectos.</p>
+
+    <form id="loginForm">
+        <input type="text" id="nombre" placeholder="Nombre Completo (MAYÚSCULAS)" required>
+        <input type="text" id="dni" placeholder="Número de DNI" required>
+        <button type="submit">VERIFICAR Y ENTRAR</button>
+    </form>
+
+  <a href="../index.html" class="btn-volver">← Volver al Inicio</a>
+</div>
+
+<script>
+    // Lógica para validar con los datos de club_constitucion.db 
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const nombreInput = document.getElementById('nombre').value.toUpperCase();
+        const dniInput = document.getElementById('dni').value;
+        const errorElement = document.getElementById('error-msg');
+
+        // Datos extraídos de tu archivo .db 
+        const socioValido = {
+            nombre: "DARIO WALTER CARRIZO",
+            dni: "21687062"
+        };
+
+        if (nombreInput === socioValido.nombre && dniInput === socioValido.dni) {
+            // Si coincide, va a perfil.html en la misma carpeta clubc
+            window.location.href = "perfil.html";
+        } else {
+            // Si no coincide, muestra el error
+            errorElement.style.display = "block";
+            setTimeout(() => { errorElement.style.display = "none"; }, 3000);
+        }
+    });
+</script>
+
+</body>
+</html>

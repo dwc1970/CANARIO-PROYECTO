@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Socios - C.S. y D. Constitución</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+:root{
+    --primario:#000;
+    --secundario:#ffd700;
+    --blanco:#fff;
+    --gris:#f4f4f4;
+    --alerta:#fff3cd;
+    --alerta-texto:#856404;
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:var(--gris);
+    color:var(--primario);
+    padding-bottom:50px;
+}
+
+/* HEADER */
+header{
+    background:var(--primario);
+    color:var(--secundario);
+    padding:1.5rem;
+    text-align:center;
+    border-bottom:5px solid var(--secundario);
+}
+
+/* NAV */
+nav{
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    background:#222;
+    padding:12px;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+nav a{
+    color:var(--blanco);
+    text-decoration:none;
+    font-weight:bold;
+    font-size:0.8rem;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:.3s;
+}
+
+nav a:hover{color:var(--secundario);}
+
+/* CONTENEDOR */
+.container{
+    max-width:600px;
+    margin:2rem auto;
+    padding:0 15px;
+}
+
+/* SECCIONES */
+section{
+    display:none;
+    background:var(--blanco);
+    padding:2.5rem 2rem;
+    border-radius:15px;
+    box-shadow:0 10px 30px rgba(0,0,0,.1);
+}
+
+section.active{
+    display:block;
+    animation:fadeIn .4s ease;
+}
+
+@keyframes fadeIn{
+    from{opacity:0;transform:translateY(10px)}
+    to{opacity:1;transform:translateY(0)}
+}
+
+/* TITULO */
+.titulo-con-logo{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.titulo-con-logo img{
+    width:55px;
+    height:55px;
+    object-fit:contain;
+}
+
+/* AVISO */
+.aviso-password{
+    background:var(--alerta);
+    color:var(--alerta-texto);
+    padding:15px;
+    border-radius:8px;
+    margin-bottom:25px;
+    border:1px solid #ffeeba;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    font-size:.95rem;
+}
+
+/* FORM */
+.form-group{margin-bottom:1.5rem;}
+
+label.title-label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:bold;
+    font-size:.9rem;
+}
+
+input, select{
+    width:100%;
+    padding:14px;
+    border:2px solid #ddd;
+    border-radius:8px;
+    font-size:1rem;
+    outline:none;
+}
+
+input:focus, select:focus{
+    border-color:var(--secundario);
+}
+
+/* BOTONES */
+button, .custom-file-upload{
+    width:100%;
+    padding:16px;
+    border-radius:8px;
+    font-weight:bold;
+    font-size:1.1rem;
+    cursor:pointer;
+    background:var(--primario);
+    color:var(--secundario);
+    border:2px solid var(--secundario);
+    transition:.3s;
+}
+
+button:hover, .custom-file-upload:hover{
+    background:var(--secundario);
+    color:var(--primario);
+}
+
+input[type="file"]{display:none;}
+
+/* CANVAS */
+#carnet-canvas{
+    width:100%;
+    border-radius:15px;
+    margin:20px 0;
+    background:#000;
+    box-shadow:0 15px 35px rgba(0,0,0,.3);
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>C.S. y D. CONSTITUCIÓN</h1>
+    <p>San Rafael, Mendoza - “El Canario”</p>
+</header>
+
+<nav>
+    <a onclick="showSection('inicio')">Afiliarse</a>
+    <a href="pagos.html">Pagos</a>
+    <a onclick="showSection('micarnet')">Mi Carnet</a>
+</nav>
+
+<div class="container">
+
+<section id="inicio" class="active">
+    <div class="titulo-con-logo">
+        <img src="logo2.png" alt="Logo">
+        <h2>Hacete Socio</h2>
+    </div>
+
+    <div class="aviso-password">
+        <i class="fas fa-lock"></i>
+        <span><strong>Importante:</strong> Tu DNI será la contraseña del Panel de Socio.</span>
+    </div>
+
+    <form id="registroForm">
+        <div class="form-group">
+            <label class="title-label">Nombre y Apellido</label>
+            <input type="text" id="nombre" required>
+        </div>
+
+        <div class="form-group">
+            <label class="title-label">DNI</label>
+            <input type="number" id="dni" required>
+        </div>
+
+        <div class="form-group">
+            <label class="title-label">Categoría</label>
+            <select id="categoria">
+                <option>Socio Activo</option>
+                <option>Socio Cadete</option>
+                <option>Socio Benefactor</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="title-label">Foto de Perfil</label>
+            <label for="fotoInput" class="custom-file-upload">
+                <i class="fas fa-camera"></i> Seleccionar Foto
+            </label>
+            <input type="file" id="fotoInput" accept="image/*" required>
+        </div>
+
+        <button type="submit">Generar mi Carnet</button>
+    </form>
+</section>
+
+<section id="micarnet">
+    <h2 style="text-align:center;">Tu Carnet Digital</h2>
+    <canvas id="carnet-canvas" width="600" height="350"></canvas>
+    <button onclick="descargarCarnet()" style="background:#28a745;border:none;color:#fff;">
+        Descargar Carnet
+    </button>
+</section>
+
+</div>
+
+<script>
+let fotoCargada=null;
+
+function showSection(id){
+    document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+document.getElementById('fotoInput').addEventListener('change',e=>{
+    const file=e.target.files[0];
+    if(!file) return;
+    const reader=new FileReader();
+    reader.onload=ev=>{
+        const img=new Image();
+        img.onload=()=>fotoCargada=img;
+        img.src=ev.target.result;
+    };
+    reader.readAsDataURL(file);
+});
+
+// --- ESTE ES EL CAMBIO CLAVE: CONEXIÓN AL SERVIDOR ---
+document.getElementById('registroForm').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    if(!fotoCargada){alert("Subí una foto");return;}
+
+    const nombre=document.getElementById('nombre').value.toUpperCase();
+    const dni=document.getElementById('dni').value;
+    const cat=document.getElementById('categoria').value;
+    const nro=Math.floor(Math.random()*9000)+1000;
+    const fotoData = fotoCargada.src; // La foto en Base64 para enviar al servidor
+
+    try {
+        const response = await fetch('/registrar-socio', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nombre, dni, categoria: cat, nro_socio: nro, foto: fotoData })
+        });
+
+        const res = await response.json();
+        
+        if(res.success) {
+            // Guardamos localmente para que las otras páginas (pagos, perfil) sepan quién entró
+            localStorage.setItem('socioNombre', nombre);
+            localStorage.setItem('socioDni', dni);
+            localStorage.setItem('socioNro', nro);
+            localStorage.setItem('socioCat', cat);
+            localStorage.setItem('socioFoto', fotoData);
+
+            generarCarnet(nombre,dni,nro,cat);
+            showSection('micarnet');
+            alert("¡Bienvenido al Club Constitución! Ya estás registrado.");
+        } else {
+            alert("Error al registrar: " + res.message);
+        }
+    } catch (err) {
+        alert("No se pudo conectar con el servidor CANARIO.");
+    }
+});
+
+function generarCarnet(nombre,dni,nro,cat){
+    const c=document.getElementById('carnet-canvas');
+    const ctx=c.getContext('2d');
+
+    ctx.fillStyle="#000";
+    ctx.fillRect(0,0,600,350);
+
+    ctx.fillStyle="#ffd700";
+    ctx.fillRect(0,0,180,350);
+
+    ctx.fillStyle="#fff";
+    ctx.font="bold 24px Arial";
+    ctx.fillText("C.S. y D. CONSTITUCIÓN",200,50);
+
+    ctx.font="20px Arial";
+    ctx.fillText(nombre,200,150);
+    ctx.fillText("DNI: "+dni,200,190);
+    ctx.fillText(cat,200,230);
+
+    ctx.fillStyle="#ffd700";
+    ctx.fillText("N° "+nro,470,320);
+
+    if(fotoCargada) ctx.drawImage(fotoCargada,20,100,140,140);
+}
+
+function descargarCarnet(){
+    const a=document.createElement('a');
+    a.download=`carnet-${localStorage.getItem('socioDni')}.png`;
+    a.href=document.getElementById('carnet-canvas').toDataURL();
+    a.click();
+}
+</script>
+
+</body>
+</html>
